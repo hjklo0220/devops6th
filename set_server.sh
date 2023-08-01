@@ -5,9 +5,6 @@ SERVER_IP=
 
 MANUAL="사용법: $0 [-i] [Server IP]"
 
-# -i 인자로 server_ip가 들어오면 해당 ip 사용
-# 그렇지 않으면, curl ifconfig.me 이용해서 ip자동입력
-
 
 while getopts "i:" option
 do
@@ -24,7 +21,7 @@ done
 
 # 검증
 if [ -z $SERVER_IP ]; then
-    $SERVER_IP=$(curl ifconfig.me)
+    SERVER_IP=$(curl ifconfig.me)
 fi
 
 # install nginx
