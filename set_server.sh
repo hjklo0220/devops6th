@@ -33,6 +33,8 @@ sudo apt install nginx
 
 # nginx 설정 파일 생성
 echo "create niginx config"
+
+
 sudo sh -c "cat > /etc/nginx/sites-available/django <<EOF
 server {
 	listen 80;
@@ -48,7 +50,15 @@ EOF"
 
 # symlink 생성
 echo "create symlink"
-sudo ln -s /etc/nginx/sites-available/django /etc/nginx/sites-enabled/
+
+TARGET_CONF=/etc/nginx/sites-enabled/django
+
+if [ -z $TARGET_CONF ]; then
+    echo "remove symlink"
+    sudo rm $TARGET_CONF
+fi
+
+sudo ln -s /etc/nginx/sites-available/django $TARGET_CONF
 
 # restart nginx
 echo "restart nginx"
