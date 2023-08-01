@@ -12,7 +12,7 @@ MANUAL="사용법: $0 [-i] [Server IP]"
 while getopts "i:" option
 do
     case $option in
-        s)
+        i)
             SERVER_IP=$OPTARG
             ;;
         *)
@@ -29,7 +29,7 @@ fi
 
 # install nginx
 echo "install nginx"
-sudo apt install nginx
+sudo apt install -y nginx
 
 # nginx 설정 파일 생성
 echo "create niginx config"
@@ -53,7 +53,7 @@ echo "create symlink"
 
 TARGET_CONF=/etc/nginx/sites-enabled/django
 
-if [ -z $TARGET_CONF ]; then
+if [ -e $TARGET_CONF ]; then
     echo "remove symlink"
     sudo rm $TARGET_CONF
 fi
