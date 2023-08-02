@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USERNAME="lion"
+USERNAME=
 PASSWD=
 
 while getopts "u:p:" option; do
@@ -25,8 +25,8 @@ echo "Add user"
 useradd -s /bin/bash -d /home/$USERNAME -m $USERNAME
 
 # password 변경
-echo "Add user"
-useradd "$USERNAME:$PASSWD" | chpasswd
+echo "Add password"
+echo "$USERNAME:$PASSWD" | chpasswd
 
 # sudoer에 추가
 echo "Add sudoer"
