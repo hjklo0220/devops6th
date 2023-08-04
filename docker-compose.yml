@@ -8,6 +8,7 @@ services:
       dockerfile: ./Dockerfile
     image: "lion-app:0.5"
     volumes:
+      - ./:/app
       - "lion-app-v:/var/www/html"
     ports:
       - "8000:8000"
