@@ -1,6 +1,8 @@
 FROM python:3.11-alpine
 LABEL likelion.web.backend.author="JunYoung Kim <hjklo0220@gmail.com>"
 
+# RUN apk add --no--cache --upgrade
+
 ARG APP_HOME=/app
 
 # 환경변수
@@ -29,6 +31,7 @@ RUN chmod +x /start
 RUN python manage.py collectstatic
 
 CMD [ "python", "--version" ]
+# CMD [ "gunicorn", "lion_app.wsgi:application", "--config", "lion_app/gunicorn_config.py" ]
 
 
 
