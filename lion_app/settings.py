@@ -30,6 +30,10 @@ ALLOWED_HOSTS = [
     '223.130.162.197',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8888",
+]
+
 
 # Application definition
 
@@ -40,6 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+# Third party Apps
+INSTALLED_APPS += []
+
+# Created Apps
+INSTALLED_APPS += [
+    'forum',
 ]
 
 MIDDLEWARE = [

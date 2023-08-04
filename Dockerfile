@@ -21,10 +21,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 필요한 모든 파일을 복사
 COPY . ${APP_HOME}
 
-RUN python manage.py migrate
+COPY ./script/start /start
+RUN sed -i  's/\r$//g' /start
+RUN chmod +x /start
+
+# RUN if [ -e /vat/www/html/static ]; then rm -rf /var/www/html/static fi
 RUN python manage.py collectstatic
 
-CMD [ "gunicorn", "lion_app.wsgi:application", "--config", "lion_app/gunicorn_config.py" ]
+CMD [ "python", "--version" ]
 
 
 
