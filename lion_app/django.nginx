@@ -1,6 +1,6 @@
 server {
 	listen 80;
-	server_name 127.0.0.1;
+	server_name 127.0.0.1 223.130.162.197;
 	
 	location / {
 		proxy_pass http://lion-app:8000;
