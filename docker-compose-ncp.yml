@@ -11,8 +11,7 @@ services:
       - "8000:8000"
     command: 
       - "/start"
-    env_file:
-      - ./prod.env
+   
 
   nginx:
     container_name: lion-nginx-dc
