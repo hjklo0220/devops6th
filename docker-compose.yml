@@ -17,7 +17,9 @@ services:
     command: 
       - "/start"
     env_file:
-      - ./.env
+      - ./.envs/local/django
+      - ./.envs/local/server
+      - ./.envs/local/db
 
   nginx:
     # restart: always
@@ -33,7 +35,7 @@ services:
     ports:
       - "8888:80"
     env_file:
-      - ./.env
+      - ./.envs/local/server
 
   db:
     container_name: lion-postgres-dc
@@ -41,7 +43,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - ./.env
+      - ./.envs/local/db
 
 volumes:
   lion-app-v:
