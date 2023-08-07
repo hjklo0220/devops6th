@@ -44,7 +44,10 @@ services:
       - 5432:5432
     env_file:
       - ./.envs/local/db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   lion-app-v:
+  postgres-data:
 
