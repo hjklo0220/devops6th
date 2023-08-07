@@ -27,6 +27,11 @@ COPY ./script/start /start
 RUN sed -i  's/\r$//g' /start
 RUN chmod +x /start
 
+# lion-app이 먼저 켜지는거 방지 스크립트
+COPY ./script/entrypoint /entrypoint
+RUN sed -i  's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
 # RUN if [ -e /vat/www/html/static ]; then rm -rf /var/www/html/static fi
 RUN python manage.py collectstatic
 

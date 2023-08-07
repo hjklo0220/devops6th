@@ -15,7 +15,9 @@ services:
     command: 
       - "/start"
     env_file:
-      - ./prod.env
+      - ./.envs/prod/django
+      - ./.envs/prod/server
+      - ./.envs/prod/db
 
   nginx:
     container_name: lion-nginx-dc
@@ -28,7 +30,7 @@ services:
     ports:
       - "8888:80"
     env_file:
-      - ./prod.env
+      - ./.envs/prod/server
 
 volumes:
   lion-app-v:
