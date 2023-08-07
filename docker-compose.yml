@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  lion-app:
+    container_name: lion-app-dc
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    image: "lion-app:0.5"
+    volumes:
+      - ./:/app
+      - "lion-app-v:/var/www/html"
+    ports:
+      - "8000:8000"
+    command: 
+      - "/start"
+    env_file:
+      - ./.env
+
+  nginx:
+    container_name: lion-nginx-dc
+    build: 
+      context: .
+      dockerfile: Dockerfile.nginx_ubuntu
+    image: lion-nginx
+    volumes:
+      - "lion-app-v:/var/www/html"
+    ports:
+      - "8888:80"
+    env_file:
+      - ./.env
+
+volumes:
+  lion-app-v:
+
