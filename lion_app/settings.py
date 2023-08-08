@@ -51,7 +51,9 @@ INSTALLED_APPS = [
 ]
 
 # Third party Apps
-INSTALLED_APPS += []
+INSTALLED_APPS += [
+    'rest_framework',
+]
 
 # Created Apps
 INSTALLED_APPS += [
