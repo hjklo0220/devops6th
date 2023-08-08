@@ -47,7 +47,15 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
 volumes:
   lion-app-v:
   postgres-data:
+  mongo-data:
 
