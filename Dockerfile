@@ -35,6 +35,8 @@ RUN chmod +x /entrypoint
 # RUN if [ -e /vat/www/html/static ]; then rm -rf /var/www/html/static fi
 RUN python manage.py collectstatic
 
+ENTRYPOINT [ "/entrypoint" ]
+
 CMD [ "python", "--version" ]
 # CMD [ "gunicorn", "lion_app.wsgi:application", "--config", "lion_app/gunicorn_config.py" ]
 
