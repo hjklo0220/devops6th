@@ -20,6 +20,8 @@ services:
       - ./.envs/prod/db
 
   nginx:
+    depends_on:
+      - lion-app
     container_name: lion-nginx-dc
     build: 
       context: .
