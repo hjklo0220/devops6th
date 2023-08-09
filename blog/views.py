@@ -7,8 +7,7 @@ from rest_framework import status
 from .serializers import BlogSerializer
 
 
-client = MongoClient(host="mongo")
-db=client.likelion
+
 
 class BlogViewSet(ViewSet):
     serializer_class = BlogSerializer
@@ -36,24 +35,28 @@ class BlogViewSet(ViewSet):
         pass
 
 
-def create_blog(request) -> bool:
-    blog = {
-        "title": "My Third blog",
-        "content": "This is my Third blog",
-        "author": "lion",
-    }
-    try:
-        db.blogs.insert_one(blog)
-        return JsonResponse({'status': True})
-    except Exception as e:
-        print(e)
-        return JsonResponse({'status': False})
 
-def update_blog():
-    pass
+# client = MongoClient(host="223.130.133.119")
+# db=client.likelion
 
-def delete_blog():
-    pass
+# def create_blog(request) -> bool:
+#     blog = {
+#         "title": "My Third blog",
+#         "content": "This is my Third blog",
+#         "author": "lion",
+#     }
+#     try:
+#         db.blogs.insert_one(blog)
+#         return JsonResponse({'status': True})
+#     except Exception as e:
+#         print(e)
+#         return JsonResponse({'status': False})
 
-def read_blog():
-    pass
+# def update_blog():
+#     pass
+
+# def delete_blog():
+#     pass
+
+# def read_blog():
+#     pass
