@@ -10,6 +10,7 @@ services:
       dockerfile: ./Dockerfile
     image: "lion-app:0.5"
     volumes:
+      - ~/.aws:/root/.aws:ro # ro: read only
       - ./:/app
       - "lion-app-v:/var/www/html"
     ports:
@@ -20,6 +21,8 @@ services:
       - ./.envs/local/django
       - ./.envs/local/server
       - ./.envs/local/db
+    environment:
+      - AWS_SECRET_NAME=like/lion/lecture
 
   nginx:
     # restart: always
@@ -47,15 +50,15 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo-data:/data/db
+  # mongo:
+  #   image: mongo:latest
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongo-data:/data/db
 
 volumes:
   lion-app-v:
   postgres-data:
-  mongo-data:
+  # mongo-data:
 

@@ -18,6 +18,8 @@ services:
       - ./.envs/prod/django
       - ./.envs/prod/server
       - ./.envs/prod/db
+    environment:
+      - AWS_SECRET_NAME=like/lion/prod
 
   nginx:
     depends_on:
@@ -33,6 +35,7 @@ services:
       - "8888:80"
     env_file:
       - ./.envs/prod/server
+
 
 volumes:
   lion-app-v:

@@ -2,14 +2,13 @@
 # If you need more information about configurations
 # or implementing the sample code, visit the AWS docs:
 # https://aws.amazon.com/developer/language/python/
+import json
 
 import boto3
 from botocore.exceptions import ClientError
 
 
-def get_secret():
-
-    secret_name = "like/lion/lecture"
+def get_secret(secret_name:str) -> dict:
     region_name = "ap-southeast-2"
 
     # Create a Secrets Manager client
@@ -32,3 +31,4 @@ def get_secret():
     secret = get_secret_value_response['SecretString']
 
     # Your code goes here.
+    return json.loads(secret)
