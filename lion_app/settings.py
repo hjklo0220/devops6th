@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 # Third party Apps
 INSTALLED_APPS += [
     'rest_framework',
+    'drf_spectacular',
 ]
 
 # Created Apps
@@ -150,3 +151,22 @@ STATIC_ROOT = '/var/www/html/static'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LikeLion Forum API',
+    'DESCRIPTION': 'Likelion 6th',
+    'VERSION': '0.0.1',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
