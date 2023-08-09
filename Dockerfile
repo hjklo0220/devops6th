@@ -33,7 +33,7 @@ RUN sed -i  's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
 # RUN if [ -e /vat/www/html/static ]; then rm -rf /var/www/html/static fi
-RUN python manage.py collectstatic
+# RUN python manage.py collectstatic
 
 ENTRYPOINT [ "/entrypoint" ]
 
