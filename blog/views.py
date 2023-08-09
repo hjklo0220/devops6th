@@ -20,7 +20,7 @@ class BlogViewSet(ViewSet):
         if serializer.is_valid():
             serializer.create(serializer.validated_data)
             # serializer.save()
-            return Response(status=status.HTTP_200_OK, data=serializer.data)
+            return Response(status=status.HTTP_201_CREATED, data=serializer.data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
 
