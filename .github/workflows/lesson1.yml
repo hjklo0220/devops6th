@@ -26,8 +26,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: lion-app build
-              run: docker build
+            - name: lion-app build 
+              run: docker build -f Dockerfile
 
 
     # docker-compose-build:
