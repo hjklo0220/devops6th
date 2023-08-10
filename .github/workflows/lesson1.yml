@@ -30,6 +30,11 @@ jobs:
             #   working-directory: lion_app
               run: docker build --tag lion-app .
 
+    docker-images:
+        needs: lion-app-build
+        name: docker images
+        runs-on: ubuntu-latest
+        steps:
             - name: docker images
               run: docker images lion-app
 
