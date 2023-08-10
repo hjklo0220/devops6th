@@ -1,4 +1,4 @@
-name: lesson1
+name: CD by git pull
 
 # push가 됐을때,
 # ssh로 서버에 접속해서,
@@ -6,9 +6,7 @@ name: lesson1
 # docker-compose restart 혹은 up --build 실행
 
 on:
-    push:
-        branches:
-          - 'main'
+  workflow_dispatch:
 
 jobs:
   deploy:

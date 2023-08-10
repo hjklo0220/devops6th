@@ -1,0 +1,26 @@
+name: CD using Docker Image
+
+
+# build image
+# push image to ncr
+# pull image from ncr
+# run new container with new image
+
+# on:
+#     push:
+#         branches:
+#           - 'main'
+on:
+    workflow_dispatch:
+
+jobs:
+    depoly-image:
+        name: deploy-image
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: build-push
+              run: |
+                docker-compose build
+                docker push devops6th-cr.kr.ncr.ntruss.com
