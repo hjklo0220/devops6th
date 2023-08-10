@@ -1,4 +1,6 @@
 
+name: lesson1
+
 on:
     pull_request:
         types: [opened]
@@ -7,7 +9,12 @@ on:
           - 'main'
 
 jobs:
-    test:   
+    test:
+        name: echo event
         runs-on: ubuntu-latest
         steps:
-            - run: echo "github push"
+            - name: get event
+              run: echo "This event is ${{github.event_name}}"
+            #   run: echo "This event is $GITHUB_EVENT_NAME"
+
+
