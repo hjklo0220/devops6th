@@ -15,7 +15,6 @@ jobs:
         steps:
             - name: get event
               run: echo "This event is ${{github.event_name}}"
-            #   run: echo "This event is $GITHUB_EVENT_NAME"
             - name: echo github context
               run: echo "${{github.repository}}"
             - name: listfiles
@@ -26,9 +25,20 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
+
             - name: lion-app build 
-            #   working-directory: lion_app
               run: docker build --tag lion-app .
+
+            - name: bulid and export
+              uses: docker/build-push-action@v4
+              with:
+                outputs: type-docker, dest=/tmp/lion-app.tar
+            
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: lion-app
+                path: /tmp/lion-app.tar
 
     docker-images:
         if: ${{ always() }}
@@ -36,16 +46,16 @@ jobs:
         name: docker images
         runs-on: ubuntu-latest
         steps:
+            - name: Download artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: lion-app
+                path: /tmp
+
             - name: docker images
-              run: docker images lion-app
+              run: |
+                docker load --input /tmp/lion-app.tar
+                docker images lion-app
 
-
-    # docker-compose-build:
-    #     name: docker compose build
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - uses: actions/checkout@v3
-    #         - name: docker compose build
-    #           run: docker-compose build
 
               
