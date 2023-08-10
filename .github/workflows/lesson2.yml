@@ -27,4 +27,4 @@ jobs:
           script: |
             cd devops6th
             git pull
-            docker-compose restart
+            docker-compose -f docker-compose.prod.yml restart
