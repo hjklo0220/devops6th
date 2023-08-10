@@ -20,13 +20,22 @@ jobs:
               run: echo "${{github.repository}}"
             - name: listfiles
               run: ls -al
-
-    docker-compose-build:
-        name: docker compose build
+    
+    lion-app-build:
+        name: lion-app build
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: docker compose build
-              run: docker-compose build
+            - name: lion-app build
+              run: docker build
+
+
+    # docker-compose-build:
+    #     name: docker compose build
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - uses: actions/checkout@v3
+    #         - name: docker compose build
+    #           run: docker-compose build
 
               
