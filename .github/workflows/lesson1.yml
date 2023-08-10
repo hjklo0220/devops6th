@@ -27,7 +27,11 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: lion-app build 
+            #   working-directory: lion_app
               run: docker build --tag lion-app .
+
+            - name: docker images
+              run: docker images lion-app
 
 
     # docker-compose-build:
