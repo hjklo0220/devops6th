@@ -27,7 +27,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: lion-app build 
-              run: docker build -f Dockerfile
+              run: docker buildx build
 
 
     # docker-compose-build:
