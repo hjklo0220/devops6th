@@ -46,7 +46,7 @@ jobs:
             
             - name: docker images
               run: |
-                docker load --input lion-app.tar
+                docker load --input /tmp/lion-app.tar
                 docker images
 
     docker-images:
