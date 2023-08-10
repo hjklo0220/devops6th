@@ -6,7 +6,8 @@ on:
         branches:
           - 'main'
 
-jobs:   
-    runs-on: ubuntu-latest
-    steps:
-        - run: echo "github push"
+jobs:
+    test:   
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "github push"
