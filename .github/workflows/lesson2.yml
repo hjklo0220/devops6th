@@ -25,6 +25,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
+            cd devops6th
             git pull
 
 
