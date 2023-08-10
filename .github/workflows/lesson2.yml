@@ -1,0 +1,34 @@
+name: lesson1
+
+# push가 됐을때,
+# ssh로 서버에 접속해서,
+# git pull 을 하고,
+# docker-compose restart 혹은 up --build 실행
+
+on:
+    push:
+        branches:
+          - 'main'
+
+jobs:
+  deploy:
+    name: deploy-server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # 서버 접속
+      - name: ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          # port: ${{ secrets.PORT }} default
+          script: |
+            git pull
+
+
+
+    
+
