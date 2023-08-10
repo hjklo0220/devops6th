@@ -14,4 +14,8 @@ jobs:
 
         # 서버 접속
         - name: ssh
-          run: sshpass -p ${{ secrets.PASSWORD }} ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} \"cd ./lion;git pull;docker compose -f docker-compos.prod.yml restart"
+          run: |
+            sshpass -p ${{ secrets.PASSWORD }} ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }}
+            cd devops6th
+            git pull
+            docker compose -f docker-compos.prod.yml restart
