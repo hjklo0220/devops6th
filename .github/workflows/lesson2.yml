@@ -19,7 +19,7 @@ jobs:
 
       # 서버 접속
       - name: ssh
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
