@@ -31,7 +31,7 @@ jobs:
 
             - name: Get current timestamp
               id: timestamp
-              run: echo "timestamp=(date '+%s')" >> "GITHUB_OUTPUT"
+              run: echo "timestamp=$(date '+%s')" >> "GITHUB_OUTPUT"
   
             - name: bulid and export
               uses: docker/build-push-action@v4
