@@ -21,8 +21,10 @@ class TopicSerializer(serializers.ModelSerializer):
             "updated_at",
         )
 
+    post_topic = serializers.SerializerMethodField()
     def get_posts(self, obj: Topic):
         return obj.post_topic.all()
+        # return Post.objects.filter(topic=obj)
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
