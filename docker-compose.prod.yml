@@ -6,7 +6,7 @@ services:
     # build: 
     #   context: .
     #   dockerfile: ./Dockerfile
-    image: "devops6th-cr.kr.ncr.ntruss.com/lion-app:lateset"
+    image: "devops6th-cr.kr.ncr.ntruss.com/lion-app:latest"
     volumes:
       - ~/.aws:/root/.aws:ro # ro: read only
       # - ./:/app
