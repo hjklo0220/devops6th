@@ -7,8 +7,8 @@ jobs:
     job1:
         runs-on: ubuntu-latest
         outputs:
-            output1: ${{ steps.step1.output.test }}
-            output2: ${{ steps.step2.output.test }}
+            output1: ${{ steps.step1.outputs.test }}
+            output2: ${{ steps.step2.outputs.test }}
         
         steps:
             - id: step1
