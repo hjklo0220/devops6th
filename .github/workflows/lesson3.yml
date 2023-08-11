@@ -65,7 +65,8 @@ jobs:
                 --env-file .envs/prod/django \
                 --env-file .envs/prod/db \
                 --env-file .envs/prod/server \
-                --name lion-app devops6th-cr.kr.ncr.ntruss.com/lion-app /start
+                --name lion-app \
+                devops6th-cr.kr.ncr.ntruss.com/lion-app /start
 
         - name: echo IMAGE_TAG
           run: echo $IMAGE_TAG
