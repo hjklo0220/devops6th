@@ -3,10 +3,10 @@ version: '3'
 services:
   lion-app:
     container_name: lion-app-dc
-    build: 
-      context: .
-      dockerfile: ./Dockerfile
-    image: "lion-app:0.5"
+    # build: 
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    image: "${NCR_HOST}lion-app"
     volumes:
       - ~/.aws:/root/.aws:ro # ro: read only
       - ./:/app

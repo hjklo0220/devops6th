@@ -50,6 +50,9 @@ jobs:
             username: ${{ secrets.USERNAME }}
             password: ${{ secrets.PASSWORD }}
             script: |
+                cd devops6th
+                git pull
                 docker pull ${{ vars.NCR_REGISTRY }}/lion-app:latest
-                docker run --name lion-app-actions -p 8080:8080 -d ${{ vars.NCR_REGISTRY }}/lion-app:latest
+                docker-compose -f docker-compose.prod.yml up -d
+                
                 
