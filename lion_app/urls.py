@@ -38,4 +38,4 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name='api-schema'),
         name='api-swagger-ui'
         ),
-] + static(settings.STATIC_URL, document_root=settings.STARIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
