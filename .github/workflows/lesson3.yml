@@ -26,7 +26,7 @@ jobs:
             - name: Login to NCR
               uses: docker/login-action@v2
               with:
-                registry: ${{ secrets.NCR_HOST }}
+                registry: ${{ vars.NCR_REGISTRY }}
                 username: ${{ secrets.NCR_ACCESS_KEY }}
                 password: ${{ secrets.NCR_SECRET_KEY }}
   
@@ -34,7 +34,21 @@ jobs:
               uses: docker/build-push-action@v4
               with:
                   context: .
-                  tags: ${{ secrets.NCR_HOST }}/lion-app:latest
+                  tags: ${{ vars.NCR_REGISTRY }}/lion-app:latest
                   push: true
-                  
+    
+    pull-run:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+
+        - name: server access
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            password: ${{ secrets.PASSWORD }}
+            script: |
+                docker pull ${{ vars.NCR_REGISTRY }}/lion-app:latest
+                docker run --name lion-app-actions -p 8080:8080 -d ${{ vars.NCR_REGISTRY }}/lion-app:latest
                 
