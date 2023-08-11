@@ -24,7 +24,7 @@ class TopicSerializer(serializers.ModelSerializer):
             "owner",
             "created_at",
             "updated_at",
-            "post_topic",
+            "posts",
         )
         read_only_field = (
             "id",
@@ -32,11 +32,12 @@ class TopicSerializer(serializers.ModelSerializer):
             "updated_at",
         )
 
-    post_topic = serializers.SerializerMethodField()
-
+    posts = serializers.SerializerMethodField()
+    
     def get_posts(self, obj: Topic):
-        post_topic = obj.post_topic.all()
-        return PostSerializer(post_topic, many=True).data
+        posts = obj.posts.all()
+        return PostSerializer(posts, many=True).data
+    
         # return Post.objects.filter(topic=obj)
 
 
