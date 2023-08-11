@@ -6,12 +6,23 @@ from .models import Topic, Post
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = "__all__" # 모델 필드 전부다 쓰겟다
+        fields = (
+            "id",
+            "name",
+            "is_private",
+            "owner",
+            "created_at",
+            "updated_at",
+            "post_topic",
+        )
         read_only_field = (
             "id",
             "created_at",
             "updated_at",
         )
+
+    def get_posts(self, obj: Topic):
+        return obj.post_topic.all()
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
