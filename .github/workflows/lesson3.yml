@@ -13,6 +13,10 @@ on:
 # on:
 #     workflow_dispatch:
 
+env:
+    IMAGE_TAG: ${{ vars.NCR_REGISTRY }}/lion-app:latest
+
+
 jobs:
     build-push:
         name: build-push
@@ -34,7 +38,7 @@ jobs:
               uses: docker/build-push-action@v4
               with:
                   context: .
-                  tags: ${{ vars.NCR_REGISTRY }}/lion-app:latest
+                  tags: ${{ env.IMAGE_TAG }}
                   push: true
     
     pull-run:
@@ -52,7 +56,9 @@ jobs:
             script: |
                 cd devops6th
                 git pull
-                docker pull ${{ vars.NCR_REGISTRY }}/lion-app:latest
+                docker login ${{ vars.NCR_REGISTRY }} \
+                -u ${{ secrets.NCR_ACCESS_KEY }} -p ${{ secrets.NCR_SECRET_KEY }}
+                docker pull ${{ env.IMAGE_TAG }}
                 docker-compose -f docker-compose.prod.yml up -d
                 
                 
