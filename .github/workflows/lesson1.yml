@@ -22,6 +22,7 @@ jobs:
               run: ls -al
     
     lion-app-build:
+        if: ${{ !github.event.act }}
         name: lion-app build
         runs-on: ubuntu-latest
         steps:
@@ -51,7 +52,7 @@ jobs:
                 docker images
 
     docker-images:
-        if: ${{ always() }}
+        if: ${{ !github.event.act }}
         needs: lion-app-build
         name: docker images
         runs-on: ubuntu-latest
