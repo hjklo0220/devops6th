@@ -11,5 +11,5 @@ jobs:
             - run: echo "This workflow is ${{ github.workflow }}"
 
     call-workflow:
-        uses: ./.github/lesson4.yml
+        uses: ./.github/workflows/lesson4.yml
 
