@@ -8,6 +8,7 @@ on:
           - '.github/workflow/CD.yml'
           - '**.py'
           - 'requirements.txt'
+          - 'docker-compose.prod.yml'
           
 # on:
 #     workflow_dispatch:
