@@ -12,7 +12,7 @@ jobs:
         name: echo name
         runs-on: ubuntu-latest
         steps:
-            - run: echo "This workflow is ${{ github.workflow }}"
+            - run: echo "This workflow is ${{ github.workflow }}" # 이파일이 아닌 콜러 파일의 이름을 사용하게 됨
 
     gteeting:
         name: greeting
