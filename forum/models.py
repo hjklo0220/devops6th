@@ -8,7 +8,7 @@ class Topic(models.Model):
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    post_topic:models.QuerySet["Post"] # IDE 타입힌트
+    posts:models.QuerySet["Post"] # IDE 타입힌트
 
     def __str__(self) -> str:
         return self.name
@@ -24,4 +24,3 @@ class Post(models.Model):
 
    def __str__(self) -> str:
        return self.title
-
