@@ -37,7 +37,7 @@ RUN chmod +x /entrypoint
 
 ENTRYPOINT [ "/entrypoint" ]
 
-CMD [ "python", "--version" ]
+CMD [ "/start" ]
 # CMD [ "gunicorn", "lion_app.wsgi:application", "--config", "lion_app/gunicorn_config.py" ]
 
 
