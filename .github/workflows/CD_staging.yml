@@ -65,6 +65,6 @@ jobs:
                 docker stop lion-app && docker rm lion-app
                 docker run -p 8000:8000 -d \
                 -v ~/.aws:/root/.aws:ro \
-                --env-file .env \
+                --env-file /lion_app./.env \
                 --name lion-app \
                 devops6th-cr.kr.ncr.ntruss.com/lion-app:latest
