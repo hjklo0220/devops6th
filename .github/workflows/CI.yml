@@ -11,7 +11,20 @@ env:
     IMAGE_TAG: ${{ vars.NCR_REGISTRY }}/lion-app:latest
 
 jobs:
+    lint:
+        name: check link (black)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: black --check .
+            
+            # - uses: psf/black@stable
+            #   with:
+            #     options: "--check"
+            #     src: "."
+
     build-push:
+        needs: lint
         name: build-push
         runs-on: ubuntu-latest
         steps:
