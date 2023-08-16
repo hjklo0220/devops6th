@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 MONGO_HOST = os.getenv("MONGO_HOST", "mongo")
 client = MongoClient(host=MONGO_HOST)
-db=client.likelion
+db = client.likelion
 
 
 class BlogSerializer(serializers.Serializer):

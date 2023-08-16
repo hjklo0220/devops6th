@@ -4,6 +4,7 @@ from forum.models import Post, Topic
 
 # Register your models here.
 
+
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
     list_display = ["name", "owner", "created_at", "updated_at", "is_private"]
@@ -13,4 +14,3 @@ class TopicAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     pass
     # list_display = ["*"]
-

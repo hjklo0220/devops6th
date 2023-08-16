@@ -7,14 +7,12 @@ from rest_framework import status
 from .serializers import BlogSerializer
 
 
-
-
 class BlogViewSet(ViewSet):
     serializer_class = BlogSerializer
 
     def list(self, request):
         return Response()
-    
+
     def create(self, request):
         serializer = BlogSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,7 +22,6 @@ class BlogViewSet(ViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
 
-
     def update(self, request):
         pass
 
@@ -33,7 +30,6 @@ class BlogViewSet(ViewSet):
 
     def destroy(self, request):
         pass
-
 
 
 # client = MongoClient(host="223.130.133.119")

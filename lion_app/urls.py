@@ -24,18 +24,15 @@ from blog.urls import router as blog_router
 from forum.urls import router as forum_router
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    
-    path('blog/', include(blog_router.urls)),
-    path('forum/', include(forum_router.urls)),
-
-    path('api-auth', include('rest_framework.urls')),
-
+    path("admin/", admin.site.urls),
+    path("blog/", include(blog_router.urls)),
+    path("forum/", include(forum_router.urls)),
+    path("api-auth", include("rest_framework.urls")),
     # drf-spectacular
-    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
-        'api/docs/',
-        SpectacularSwaggerView.as_view(url_name='api-schema'),
-        name='api-swagger-ui'
-        ),
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="api-schema"),
+        name="api-swagger-ui",
+    ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

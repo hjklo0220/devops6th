@@ -7,7 +7,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'lion-lb-staging-18975817-1caa10020eef.kr.lb.naverncp.com',
+    "lion-lb-staging-18975817-1caa10020eef.kr.lb.naverncp.com",
 ]
 
 # CSRF_TRUSTED_ORIGINS = [
