@@ -16,12 +16,19 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            # - name: setup python
-            
-            - uses: psf/black@stable
+            - name: setup python
+              uses: actions/setup-python@v4
               with:
-                options: "--check"
-                src: "."
+                python-version: '3.11'
+            - name: install black
+              run: pip install black
+            - name: check black
+              run: black --check .
+            
+            # - uses: psf/black@stable
+            #   with:
+            #     options: "--check"
+            #     src: "."
 
     build-push:
         needs: lint
