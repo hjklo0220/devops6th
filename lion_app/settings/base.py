@@ -16,7 +16,7 @@ from pathlib import Path
 # from common.aws import get_secret
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECRET_NAME = os.getenv('AWS_SECRET_NAME', "like/lion/lecture")
 # secret = get_secret(SECRET_NAME)
