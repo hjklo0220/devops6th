@@ -9,6 +9,7 @@ on:
           - '**.py'
           - 'requirements.txt'
           - 'docker-compose.prod.yml'
+          - 'Dockerfile'
           
 # on:
 #     workflow_dispatch:
