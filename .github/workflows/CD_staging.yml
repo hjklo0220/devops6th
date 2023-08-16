@@ -1,18 +1,12 @@
-name: CD using Docker Image
+name: CD Staging server
 
-# on:
-#     push:
-#         branches:
-#           - 'main'
-        # paths:
-        #   - '.github/workflow/CD.yml'
-        #   - '**.py'
-        #   - 'requirements.txt'
-        #   - 'docker-compose.prod.yml'
-        #   - 'Dockerfile'
-          
 on:
-    workflow_dispatch:
+    push:
+        branches:
+          - 'main'
+          
+# on:
+#     workflow_dispatch:
 
 env:
     IMAGE: ${{ vars.NCR_REGISTRY }}/lion-app
@@ -51,8 +45,9 @@ jobs:
             output1: ${{ steps.timestamp.outputs.timestamp }}
 
     
-    pull-run:
+    deploy-staging:
         needs: build-push
+        name: deploy to staging
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v3
@@ -60,23 +55,16 @@ jobs:
         - name: server access
           uses: appleboy/ssh-action@v1.0.0
           with:
-            host: ${{ secrets.HOST }}
+            host: ${{ secrets.STAGE_HOST }}
             username: ${{ secrets.USERNAME }}
             password: ${{ secrets.PASSWORD }}
             script: |
-                cd devops6th
-                git pull
                 docker login ${{ vars.NCR_REGISTRY }} \
                 -u ${{ secrets.NCR_ACCESS_KEY }} -p ${{ secrets.NCR_SECRET_KEY }}
                 docker pull ${{ env.IMAGE_TAG }}
                 docker stop lion-app && docker rm lion-app
                 docker run -p 8000:8000 -d \
                 -v ~/.aws:/root/.aws:ro \
-                --env-file .envs/prod/django \
-                --env-file .envs/prod/db \
-                --env-file .envs/prod/server \
+                --env-file .env \
                 --name lion-app \
                 devops6th-cr.kr.ncr.ntruss.com/lion-app:latest
-
-        - name: echo IMAGE_TAG
-          run: echo $IMAGE_TAG
