@@ -39,4 +39,16 @@ class PostViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_401_UNAUTHORIZED,
                     data="This user is not allowed to write a post on this topic",
                 )
-        return super().create(request, *args, **kwargs)
+
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            data["owner"] = request.user
+            res: Post = serializer.create(data)
+            return Response(
+                status=status.HTTP_201_CREATED, data=PostSerializer(res).data
+            )
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+
+        # return super().create(request, *args, **kwargs)
