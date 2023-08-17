@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from forum.models import Post, Topic
+from forum.models import Post, Topic, TopicGroupUser
 
 # Register your models here.
 
@@ -14,3 +14,6 @@ class TopicAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     pass
     # list_display = ["*"]
+
+
+admin.site.register(TopicGroupUser)
