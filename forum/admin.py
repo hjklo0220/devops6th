@@ -16,4 +16,6 @@ class PostAdmin(admin.ModelAdmin):
     # list_display = ["*"]
 
 
-admin.site.register(TopicGroupUser)
+@admin.register(TopicGroupUser)
+class TopicGroupUserAdmin(admin.ModelAdmin):
+    list_display = ["topic", "group", "user"]
