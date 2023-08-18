@@ -8,6 +8,7 @@ services:
     build: 
       context: .
       dockerfile: ./Dockerfile
+    command: /start
     env_file:
       - ./.envs/local/django
       - ./.envs/local/server
@@ -15,7 +16,7 @@ services:
 
   db:
     container_name: db-test
-    image: postgres:13
+    image: postgres:15
     ports:
       - 54321:5432
     env_file:
