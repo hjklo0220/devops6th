@@ -79,6 +79,17 @@ class PostTest(APITestCase):
         res: HttpResponse = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
+        # admin test
+        admin = User.objects.create_user("admin")
+        TopicGroupUser.objects.create(
+            topic=self.private_topic,
+            group=TopicGroupUser.GroupChoices.admin,
+            user=admin,
+        )
+        self.client.force_login(admin)
+        res: HttpResponse = self.client.post(reverse("post-list"), data=data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
     def test_read_permission_topics(self):
         # read public topic
         # unauthorized user request => 200, public topic's posts
