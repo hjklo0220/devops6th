@@ -113,3 +113,19 @@ class PostTest(APITestCase):
         data = json.loads(res.content)
         posts_n = Post.objects.filter(topic=self.private_topic).count()
         self.assertEqual(len(data), posts_n)
+
+    def test_read_permission_on_post(self):
+        self.client.force_login(self.unauthorized_user)
+        public_post = Post.objects.filter(topic=self.public_topic).first()
+        res = self.client.get(reverse("post-detail", args=[public_post.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.client.force_login(self.unauthorized_user)
+        private_post = Post.objects.filter(topic=self.private_topic).first()
+        res = self.client.get(reverse("post-detail", args=[private_post.pk]))
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.client.force_login(self.authorized_user)
+        private_post = Post.objects.filter(topic=self.private_topic).first()
+        res = self.client.get(reverse("post-detail", args=[private_post.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
