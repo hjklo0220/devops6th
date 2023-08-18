@@ -12,7 +12,7 @@ env:
 
 jobs:
     lint:
-        name: check link (black)
+        name: check lint (black)
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
             #     options: "--check"
             #     src: "."
 
-    build-push:
+    build-push-test:
         needs: lint
         name: build-push
         runs-on: ubuntu-latest
@@ -51,9 +51,25 @@ jobs:
               id: timestamp
               run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT"
   
-            - name: bulid and export
-              uses: docker/build-push-action@v4
-              with:
-                  context: .
-                  tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:${{ steps.timestamp.outputs.timestamp }}"
-                  push: false
+            # - name: bulid and export
+            #   uses: docker/build-push-action@v4
+            #   with:
+            #       context: .
+            #       tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:${{ steps.timestamp.outputs.timestamp }}"
+            #       push: false
+                  # platforms: liunx/amd64, linux/arm64
+            - name: build
+              run: |
+                docker build -t test-lion:test .
+            
+            - name: Run Test
+              run: |
+                docker run --name lion-test -d -e DJANGO_SETTINGS_MODULE=lion_app.settings.test \
+                test-lion:test python --version
+                docker exec lion-test ls -l lion_app/settings
+                docker exec lion-test python manage.py test
+            
+            - name: post build
+              if: ${{ always() }}
+              run: |
+                docker stop lion-test && docker rm lion-test
