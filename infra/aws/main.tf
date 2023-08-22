@@ -28,9 +28,9 @@ resource "aws_iam_user" "dev" {
   path = "/dev/"
 }
 
-# resource "aws_iam_access_key" "lion" {
-#   user = aws_iam_user.lion.name
-# }
+resource "aws_iam_access_key" "lion" {
+  user = aws_iam_user.dev.name
+}
 
 data "aws_iam_policy_document" "lion_ro" {
   statement {

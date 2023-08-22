@@ -9,14 +9,27 @@ terraform {
 
 // Configure the ncloud provider
 provider "ncloud" {
+  access_key = var.NCP_ACCESS_KEY
+  secret_key = var.NCP_SECRET_KEY
   region = "KR"
   site = "PUBLIC"
   support_vpc = true
 }
 
-// 변수 지정
+// 변수 지정 (실행시 입력받음) "export TF_VAR_password=" 지정해주면 안물어봄
 variable "password" {
   type = string
+  sensitive = true
+}
+
+variable "NCP_ACCESS_KEY" {
+  type = string
+  sensitive = true
+}
+
+variable "NCP_SECRET_KEY" {
+  type = string
+  sensitive = true
 }
 
 resource "ncloud_login_key" "loginkey" {
