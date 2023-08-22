@@ -53,3 +53,8 @@ output "password" {
   value = aws_iam_user_login_profile.example.password
   sensitive = true
 }
+
+resource "local_file" "users" {
+  content = "users"
+  filename = "${path.module}/users.txt"
+}
