@@ -51,12 +51,54 @@ resource "ncloud_subnet" "main" {
   name = "lion-tf-sub"
 }
 
-# init script
-resource "ncloud_init_script" "init" {
-  name    = "set-docker-tf"
-  content = templatefile("${path.module}/main_init_script.tftpl", {
-    password = var.password
+# init script be
+resource "ncloud_init_script" "be" {
+  name    = "set-be"
+  content = templatefile("${path.module}/be_init_script.tftpl", {
+  password = var.password
+  DB_HOST = var.DB_HOST
+  POSTGRES_DB = var.POSTGRES_DB
+  POSTGRES_USER = var.POSTGRES_USER
+  POSTGRES_PASSWORD = var.POSTGRES_PASSWORD
+  POSTGRES_PORT = var.POSTGRES_PORT
+  DJANGO_SETTINGS_MODULE = var.DJANGO_SETTINGS_MODULE
+  DJANGO_SECRET_KEY = var.DJANGO_SECRET_KEY
   })
+}
+
+variable "DB_HOST" {
+  type = string
+  sensitive = true
+}
+
+variable "POSTGRES_DB" {
+  type = string
+  sensitive = true
+}
+
+variable "POSTGRES_USER" {
+  type = string
+  sensitive = true
+}
+
+variable "POSTGRES_PASSWORD" {
+  type = string
+  sensitive = true
+}
+
+variable "POSTGRES_PORT" {
+  type = string
+  sensitive = true
+}
+
+variable "DJANGO_SETTINGS_MODULE" {
+  type = string
+  sensitive = true
+}
+
+variable "DJANGO_SECRET_KEY" {
+  type = string
+  sensitive = true
 }
 
 resource "ncloud_server" "server" {
@@ -65,7 +107,7 @@ resource "ncloud_server" "server" {
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
   server_product_code = data.ncloud_server_products.sm.server_products[0].product_code
   login_key_name            = ncloud_login_key.loginkey.key_name
-  init_script_no = ncloud_init_script.init.init_script_no
+  init_script_no = ncloud_init_script.be.init_script_no
   network_interface {
     network_interface_no = ncloud_network_interface.be.id
     order = 0
@@ -112,24 +154,18 @@ data "ncloud_server_products" "sm" {
   output_file = "product.json"
 }
 
-
-
-output "products" {
-  value = {
-    for product in data.ncloud_server_products.sm.server_products:
-    product.id => product.product_name
-  }
+# init script db
+resource "ncloud_init_script" "db" {
+  name    = "set-db"
+  content = templatefile("${path.module}/db_init_script.tftpl", {
+  password = var.password
+  DB_HOST = var.DB_HOST
+  POSTGRES_DB = var.POSTGRES_DB
+  POSTGRES_USER = var.POSTGRES_USER
+  POSTGRES_PASSWORD = var.POSTGRES_PASSWORD
+  POSTGRES_PORT = var.POSTGRES_PORT
+  })
 }
-
-# 서버 ip가져오는 방법
-output "be_public_ip" {
-  value = ncloud_public_ip.be_server.public_ip
-}
-
-output "db_public_ip" {
-  value = ncloud_public_ip.db.public_ip
-}
-
 
 # db
 resource "ncloud_server" "db" {
@@ -138,7 +174,7 @@ resource "ncloud_server" "db" {
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
   server_product_code = data.ncloud_server_products.sm.server_products[0].product_code
   login_key_name            = ncloud_login_key.loginkey.key_name
-  init_script_no = ncloud_init_script.init.init_script_no
+  init_script_no = ncloud_init_script.db.init_script_no
   network_interface {
     network_interface_no = ncloud_network_interface.db.id
     order = 0
@@ -251,6 +287,22 @@ resource "ncloud_lb_listener" "lb-listener" {
 resource "ncloud_lb_target_group_attachment" "test" {
   target_group_no = ncloud_lb_target_group.tg.target_group_no
   target_no_list = [ncloud_server.server.instance_no]
+}
+
+// ==== outputs ====
+output "products" {
+  value = {
+    for product in data.ncloud_server_products.sm.server_products:
+    product.id => product.product_name
+  }
+}
+
+output "be_public_ip" {
+  value = ncloud_public_ip.be_server.public_ip
+}
+
+output "db_public_ip" {
+  value = ncloud_public_ip.db.public_ip
 }
 
 output "lb" {

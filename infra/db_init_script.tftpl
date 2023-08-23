@@ -24,4 +24,15 @@ sudo service docker start && sudo service docker enable
 echo "Add user to 'docker' group"
 sudo usermod -aG docker $USERNAME
 
+# 2. create .env file
+echo "create .env"
+
+ENV_PATH=/home/$USERNAME/.env
+touch $ENV_PATH
+
+echo "POSTGRES_DB=${POSTGRES_DB}" >> $ENV_PATH
+echo "POSTGRES_USER=${POSTGRES_USER}" >> $ENV_PATH
+echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" >> $ENV_PATH
+echo "POSTGRES_PORT=${POSTGRES_PORT}" >> $ENV_PATH
+
 echo "done"
