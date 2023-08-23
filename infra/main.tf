@@ -56,7 +56,7 @@ resource "ncloud_init_script" "be" {
   name    = "set-be"
   content = templatefile("${path.module}/be_init_script.tftpl", {
   password = var.password
-  DB_HOST = var.DB_HOST
+  DB_HOST = ncloud_public_ip.db.public_ip
   POSTGRES_DB = var.POSTGRES_DB
   POSTGRES_USER = var.POSTGRES_USER
   POSTGRES_PASSWORD = var.POSTGRES_PASSWORD
@@ -66,10 +66,6 @@ resource "ncloud_init_script" "be" {
   })
 }
 
-variable "DB_HOST" {
-  type = string
-  sensitive = true
-}
 
 variable "POSTGRES_DB" {
   type = string
@@ -159,7 +155,6 @@ resource "ncloud_init_script" "db" {
   name    = "set-db"
   content = templatefile("${path.module}/db_init_script.tftpl", {
   password = var.password
-  DB_HOST = var.DB_HOST
   POSTGRES_DB = var.POSTGRES_DB
   POSTGRES_USER = var.POSTGRES_USER
   POSTGRES_PASSWORD = var.POSTGRES_PASSWORD
