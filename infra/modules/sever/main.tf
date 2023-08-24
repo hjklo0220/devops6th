@@ -17,33 +17,36 @@ provider "ncloud" {
 }
 
 resource "ncloud_login_key" "loginkey" {
-  key_name = "staging-key"
+  key_name = "key-${var.env}"
 }
 
-resource "ncloud_vpc" "lion-vpc" {
-  ipv4_cidr_block = "10.1.0.0/16"
-  name = "lion-tf"
+# resource "ncloud_vpc" "lion-vpc" {
+#   ipv4_cidr_block = "10.1.0.0/16"
+#   name = "lion-tf-${var.env}"
+# }
+data "ncloud_vpc" "lion-vpc" {
+  id = var.vpc_no
 }
 
 resource "ncloud_subnet" "main" {
-  vpc_no         = ncloud_vpc.lion-vpc.vpc_no
-  subnet         = cidrsubnet(ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 1)
+  vpc_no         = data.ncloud_vpc.lion-vpc.vpc_no
+  subnet         = cidrsubnet(data.ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 1)
   zone           = "KR-2"
-  network_acl_no = ncloud_vpc.lion-vpc.default_network_acl_no
+  network_acl_no = data.ncloud_vpc.lion-vpc.default_network_acl_no
   subnet_type    = "PUBLIC"
   usage_type     = "GEN"
-  name = "lion-tf-sub"
+  name = "lion-tf-sub-${var.env}"
 }
 
 # lb-subnet
 resource "ncloud_subnet" "be-lb" {
-  vpc_no         = ncloud_vpc.lion-vpc.vpc_no
-  subnet         = cidrsubnet(ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 2)
+  vpc_no         = data.ncloud_vpc.lion-vpc.vpc_no
+  subnet         = cidrsubnet(data.ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 2)
   zone           = "KR-2"
-  network_acl_no = ncloud_vpc.lion-vpc.default_network_acl_no
+  network_acl_no = data.ncloud_vpc.lion-vpc.default_network_acl_no
   subnet_type    = "PRIVATE"
   usage_type     = "LOADB"
-  name = "be-lb-subnet"
+  name = "be-lb-subnet-${var.env}"
 }
 
 resource "ncloud_public_ip" "be_server" {
@@ -56,7 +59,7 @@ resource "ncloud_public_ip" "db" {
 
 # init script be
 resource "ncloud_init_script" "be" {
-  name    = "set-be"
+  name    = "set-be-${var.env}"
   content = templatefile("${path.module}/be_init_script.tftpl", {
   password = var.password
   DB_HOST = ncloud_public_ip.db.public_ip
@@ -71,7 +74,7 @@ resource "ncloud_init_script" "be" {
 
 resource "ncloud_server" "server" {
   subnet_no                 = ncloud_subnet.main.id
-  name                      = "be-staging"
+  name                      = "be-${var.env}"
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
   server_product_code = data.ncloud_server_products.sm.server_products[0].product_code
   login_key_name            = ncloud_login_key.loginkey.key_name
@@ -119,7 +122,7 @@ data "ncloud_server_products" "sm" {
 
 # init script db
 resource "ncloud_init_script" "db" {
-  name    = "set-db"
+  name    = "set-db-${var.env}"
   content = templatefile("${path.module}/db_init_script.tftpl", {
   password = var.password
   POSTGRES_DB = var.POSTGRES_DB
@@ -132,7 +135,7 @@ resource "ncloud_init_script" "db" {
 # db
 resource "ncloud_server" "db" {
   subnet_no                 = ncloud_subnet.main.id
-  name                      = "db-staging"
+  name                      = "db-${var.env}"
   server_image_product_code = "SW.VSVR.OS.LNX64.UBNTU.SVR2004.B050"
   server_product_code = data.ncloud_server_products.sm.server_products[0].product_code
   login_key_name            = ncloud_login_key.loginkey.key_name
@@ -145,8 +148,8 @@ resource "ncloud_server" "db" {
 
 // ACG 설정
 resource "ncloud_access_control_group" "be-acg" {
-  name = "be-acg"
-  vpc_no = ncloud_vpc.lion-vpc.id
+  name = "be-acg-${var.env}"
+  vpc_no = data.ncloud_vpc.lion-vpc.id
 }
 
 resource "ncloud_access_control_group_rule" "be-acg-rule" {
@@ -162,17 +165,17 @@ resource "ncloud_access_control_group_rule" "be-acg-rule" {
 
 // network interface 생성후 acg적용
 resource "ncloud_network_interface" "be" {
-    name                  = "be-nic"
+    name                  = "be-nic-${var.env}"
     subnet_no             = ncloud_subnet.main.id
     access_control_groups = [
-        ncloud_vpc.lion-vpc.default_access_control_group_no,
+        data.ncloud_vpc.lion-vpc.default_access_control_group_no,
         ncloud_access_control_group.be-acg.id,
     ]
 }
 
 resource "ncloud_access_control_group" "db-acg" {
-  name = "db-staging-acg"
-  vpc_no = ncloud_vpc.lion-vpc.id
+  name = "db-acg-${var.env}"
+  vpc_no = data.ncloud_vpc.lion-vpc.id
 }
 
 resource "ncloud_access_control_group_rule" "db-acg-rule" {
@@ -187,10 +190,10 @@ resource "ncloud_access_control_group_rule" "db-acg-rule" {
 }
 
 resource "ncloud_network_interface" "db" {
-    name                  = "db-nic"
+    name                  = "db-nic-${var.env}"
     subnet_no             = ncloud_subnet.main.id
     access_control_groups = [
-        ncloud_vpc.lion-vpc.default_access_control_group_no,
+        data.ncloud_vpc.lion-vpc.default_access_control_group_no,
         ncloud_access_control_group.db-acg.id,
     ]
 }
