@@ -35,18 +35,7 @@ resource "ncloud_subnet" "main" {
   network_acl_no = data.ncloud_vpc.lion-vpc.default_network_acl_no
   subnet_type    = "PUBLIC"
   usage_type     = "GEN"
-  name = "lion-tf-sub-${var.env}"
-}
-
-# lb-subnet
-resource "ncloud_subnet" "be-lb" {
-  vpc_no         = data.ncloud_vpc.lion-vpc.vpc_no
-  subnet         = cidrsubnet(data.ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 2)
-  zone           = "KR-2"
-  network_acl_no = data.ncloud_vpc.lion-vpc.default_network_acl_no
-  subnet_type    = "PRIVATE"
-  usage_type     = "LOADB"
-  name = "be-lb-subnet-${var.env}"
+  name = "lion-subnet-${var.env}"
 }
 
 resource "ncloud_public_ip" "be_server" {

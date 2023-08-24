@@ -6,6 +6,6 @@ output "db_public_ip" {
   value = module.servers.db_public_ip
 }
 
-# output "lb" {
-#   value = ncloud_lb.be-staging.domain
-# }
+output "lb" {
+  value = module.lb.lb_domain
+}

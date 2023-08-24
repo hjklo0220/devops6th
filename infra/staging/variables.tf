@@ -44,6 +44,6 @@ variable "DJANGO_SECRET_KEY" {
   sensitive = true
 }
 
-variable "env" {
-  type = string
-}
+# variable "env" {
+#   type = string
+# }
