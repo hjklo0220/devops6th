@@ -22,3 +22,12 @@ resource "ncloud_vpc" "lion-vpc" {
   name = "lion-tf-${var.env}"
 }
 
+resource "ncloud_subnet" "main" {
+  vpc_no         = ncloud_vpc.lion-vpc.vpc_no
+  subnet         = cidrsubnet(ncloud_vpc.lion-vpc.ipv4_cidr_block, 8, 1)
+  zone           = "KR-2"
+  network_acl_no = ncloud_vpc.lion-vpc.default_network_acl_no
+  subnet_type    = "PUBLIC"
+  usage_type     = "GEN"
+  name = "lion-subnet-${var.env}"
+}

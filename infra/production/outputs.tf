@@ -1,9 +1,9 @@
 output "be-prod-ip" {
-  value = module.servers.be_public_ip
+  value = ncloud_public_ip.be_server.public_ip
 }
 
 output "db-prod-ip" {
-  value = module.servers.db_public_ip
+  value = ncloud_public_ip.db_server.public_ip
 }
 
 output "lb-prod" {
