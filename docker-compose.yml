@@ -21,6 +21,7 @@ services:
       - ./.envs/local/django
       - ./.envs/local/server
       - ./.envs/local/db
+      - ./.envs/prod/ncp
     environment:
       - AWS_SECRET_NAME=like/lion/lecture
 
