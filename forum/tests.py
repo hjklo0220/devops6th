@@ -1,4 +1,6 @@
 import json
+import tempfile
+from unittest.mock import patch, MagicMock
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -129,3 +131,32 @@ class PostTest(APITestCase):
         private_post = Post.objects.filter(topic=self.private_topic).first()
         res = self.client.get(reverse("post-detail", args=[private_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    @patch("forum.views.boto3.client")
+    def test_post_with_or_without_image(self, client: MagicMock):
+        # mock s3
+        s3 = MagicMock()
+        client.return_value = s3
+        s3.upload_fileobj.return_value = None
+        s3.put_object_acl.return_value = None
+
+        data = {
+            "topic": self.public_topic.pk,
+            "title": "test",
+            "content": "test",
+        }
+
+        self.client.force_login(self.authorized_user)
+        res: HttpResponse = self.client.post(reverse("post-list"), data=data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as f:
+            data["image"] = f
+            res: HttpResponse = self.client.post(reverse("post-list"), data=data)
+            self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+            res_data = json.loads(res.content)
+            self.assertTrue(res_data["image_url"].startswith("https://"))
+
+        s3.upload_fileobj.assert_called_once()
+        s3.put_object_acl.assert_called_once()

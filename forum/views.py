@@ -1,6 +1,7 @@
 import uuid
 
 import boto3
+from django.core.files.base import File
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
@@ -66,7 +67,8 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
         # if image exists
-        if image := data.get("image"):
+        if image := request.data.get("image"):
+            image: File
             service_name = "s3"
             endpoint_url = "https://kr.object.ncloudstorage.com"
             access_key = settings.NCP_ACCESS_KEY
@@ -80,19 +82,19 @@ class PostViewSet(viewsets.ModelViewSet):
                 aws_secret_access_key=secret_key,
             )
 
-        # upload it to Object Storage(S3)
-        image_id = str(uuid.uuid4())
-        ext = image.name.split(".")[-1]
-        image_filename = f"{image_id}.{ext}"
-        s3.upload_fileobj(image.file, bucket_name, image_filename)
+            # upload it to s3
+            image_id = str(uuid.uuid4())
+            ext = image.name.split(".")[-1]
+            image_filename = f"{image_id}.{ext}"
+            s3.upload_fileobj(image.file, bucket_name, image_filename)
 
-        # and get its url
-        s3.put_object_acl(
-            ACL="public-read",
-            Bucket=bucket_name,
-            Key=image_filename,
-        )
-        image_url = f"{endpoint_url}/{bucket_name}/{image_filename}"
+            # get url
+            s3.put_object_acl(
+                ACL="public-read",
+                Bucket=bucket_name,
+                Key=image_filename,
+            )
+            image_url = f"{endpoint_url}/{bucket_name}/{image_filename}"
 
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
