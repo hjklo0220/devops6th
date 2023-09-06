@@ -21,24 +21,24 @@ resource "aws_vpc" "example" {
   }
 }
 
-# Create IAM user
-resource "aws_iam_user" "dev" {
-  for_each = toset([ "dog", "cat", "pig" ])
-  name = each.key
-  path = "/dev/"
-}
+# # Create IAM user
+# resource "aws_iam_user" "dev" {
+#   for_each = toset([ "dog", "cat", "pig" ])
+#   name = each.key
+#   path = "/dev/"
+# }
 
-resource "aws_iam_access_key" "lion" {
-  user = aws_iam_user.dev.name
-}
+# resource "aws_iam_access_key" "lion" {
+#   user = aws_iam_user.dev.name
+# }
 
-data "aws_iam_policy_document" "lion_ro" {
-  statement {
-    effect    = "Allow"
-    actions   = ["ec2:Describe*"]
-    resources = ["*"]
-  }
-}
+# data "aws_iam_policy_document" "lion_ro" {
+#   statement {
+#     effect    = "Allow"
+#     actions   = ["ec2:Describe*"]
+#     resources = ["*"]
+#   }
+# }
 
 # resource "aws_iam_user_policy" "lion_ro" {
 #   name   = "tf-test"
