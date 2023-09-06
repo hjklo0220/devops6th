@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # create volume
-docker create volume postgres-data
+# docker create volume postgres-data
 
 # docker run
 echo "docker run"
