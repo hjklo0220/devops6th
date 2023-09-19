@@ -34,7 +34,7 @@ resource "ncloud_subnet" "be-lb" {
 
 # loadbalance
 resource "ncloud_lb" "lion-lb" {
-  name = "lion-lb-${var.env}"
+  name = "track-${var.env}"
   network_type = "PUBLIC"
   type = "NETWORK_PROXY"
   subnet_no_list = [ ncloud_subnet.be-lb.subnet_no ]

@@ -22,11 +22,11 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from blog.urls import router as blog_router
 from forum.urls import router as forum_router
-
-# from common.views import healthcheck
+from common.views import get_version
 
 
 urlpatterns = [
+    path("version/", get_version, name="version"),
     # path("health/", healthcheck, name="healthcheck"),
     path("admin/", admin.site.urls),
     path("blog/", include(blog_router.urls)),

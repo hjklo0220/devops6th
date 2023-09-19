@@ -83,7 +83,7 @@ module "vpc" {
 module "lb" {
   source = "../modules/lb"
 
-  env = local.env
+  env = "prod"
   NCP_ACCESS_KEY = var.NCP_ACCESS_KEY
   NCP_SECRET_KEY = var.NCP_SECRET_KEY
   vpc_no = module.vpc.vpc_no
