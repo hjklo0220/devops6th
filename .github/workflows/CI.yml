@@ -3,6 +3,8 @@ name: CI
 on:
     pull_request:
     push:
+        tags:
+          - '*'
         branches:
             - 'main'
 
@@ -55,6 +57,10 @@ jobs:
             - name: Get current timestamp
               id: timestamp
               run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT"
+
+            - name: Get version
+              id: version
+              run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
   
             - name: bulid and export
               uses: docker/build-push-action@v4
