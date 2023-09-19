@@ -26,7 +26,7 @@ jobs:
                 path: lion
 
             - name: run test
-              run: ls -l
+              run: ls -l lion
 
     
     # deploy-staging:
