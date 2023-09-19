@@ -54,19 +54,19 @@ jobs:
                 username: ${{ secrets.NCR_ACCESS_KEY }}
                 password: ${{ secrets.NCR_SECRET_KEY }}
 
-            - name: Get current timestamp
-              id: timestamp
-              run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT"
+            # - name: Get current timestamp
+            #   id: timestamp
+            #   run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT" {{ steps.timestamp.outputs.timestamp }}
 
-            - name: Get version
-              id: version
-              run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+            # - name: Get version
+            #   id: version
+            #   run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT" {{steps.version.outputs.VERSION}}
   
             - name: bulid and export
               uses: docker/build-push-action@v4
               with:
                   context: .
-                  tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:test${{ github.ref_name }}"
+                  tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:${{ github.ref_name }}"
                   push: true
 
             - name: docker-compose down
