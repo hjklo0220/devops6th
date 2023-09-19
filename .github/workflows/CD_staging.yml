@@ -4,6 +4,8 @@ on:
     push:
         branches:
           - 'main'
+        tags:
+          - '*.*.*'
         paths:
           - '.github/workflows/CD_staging.yml'
           - '**.py'
@@ -28,7 +30,7 @@ jobs:
             - name: change apiVersion
               run: |
                 cd lion
-                sed -i 's/appVersion: "0.1.0"/appVersion: "0.2.0"/g' Chart.yaml
+                sed -i 's/appVersion: ".*"/appVersion: "${{ github.ref_name }}"/g' Chart.yaml
                 cat ../lion/Chart.yaml
                 git add .
                 git config --global user.email "hjklo0220@gmail.com"
