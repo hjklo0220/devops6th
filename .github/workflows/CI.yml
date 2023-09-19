@@ -1,12 +1,15 @@
 name: CI
 
 on:
-    pull_request:
-    push:
-        tags:
-          - '*.*.*'
-        branches:
-            - 'main'
+    workflow_dispatch:
+
+# on:
+#     pull_request:
+#     push:
+#         tags:
+#           - '*.*.*'
+#         branches:
+#             - 'main'
 
 env:
     IMAGE: ${{ vars.NCR_REGISTRY }}/lion-app

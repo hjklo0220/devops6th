@@ -5,7 +5,7 @@ on:
         branches:
           - 'main'
         paths:
-          - '.github/workflow/CD.yml'
+          - '.github/workflows/CD.yml'
           - '**.py'
           - 'requirements.txt'
           - 'docker-compose.prod.yml'
