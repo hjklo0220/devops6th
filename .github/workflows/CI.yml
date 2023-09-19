@@ -4,7 +4,7 @@ on:
     pull_request:
     push:
         tags:
-          - '*'
+          - '*.*.*'
         branches:
             - 'main'
 
@@ -54,15 +54,24 @@ jobs:
                 username: ${{ secrets.NCR_ACCESS_KEY }}
                 password: ${{ secrets.NCR_SECRET_KEY }}
 
-            # - name: Get current timestamp
-            #   id: timestamp
-            #   run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT" {{ steps.timestamp.outputs.timestamp }}
+            - name: Get current timestamp
+              id: timestamp
+              run: echo "timestamp=$(date '+%s')" >> "$GITHUB_OUTPUT"
 
             # - name: Get version
             #   id: version
             #   run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT" {{steps.version.outputs.VERSION}}
   
             - name: bulid and export
+              if: startsWith(github.ref, 'refs/heads')
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:${{ steps.timestamp.outputs.timestamp }}"
+                  push: true
+
+            - name: bulid and export
+              if: startsWith(github.ref, 'refs/tags')
               uses: docker/build-push-action@v4
               with:
                   context: .
