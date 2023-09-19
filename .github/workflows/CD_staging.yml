@@ -30,6 +30,11 @@ jobs:
                 sed -i 's/appVersion: "0.1.0"/appVersion: "0.2.0"/g' Chart.yaml
                 cat ../lion/Chart.yaml
 
+            - name: Commit & Push changes
+              uses: actions-js/push@master
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+
     
     # deploy-staging:
     #     # needs: build-push
