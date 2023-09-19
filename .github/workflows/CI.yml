@@ -62,7 +62,7 @@ jobs:
             #   id: version
             #   run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT" {{steps.version.outputs.VERSION}}
   
-            - name: bulid and export
+            - name: bulid and push refs/heads
               if: startsWith(github.ref, 'refs/heads')
               uses: docker/build-push-action@v4
               with:
@@ -70,7 +70,7 @@ jobs:
                   tags: ${{ env.IMAGE_TAG }},"${{ env.IMAGE }}:${{ steps.timestamp.outputs.timestamp }}"
                   push: true
 
-            - name: bulid and export
+            - name: bulid and push refs/tags
               if: startsWith(github.ref, 'refs/tags')
               uses: docker/build-push-action@v4
               with:
