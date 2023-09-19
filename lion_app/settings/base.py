@@ -18,6 +18,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+VERSION = "0.3.1"
+
 # SECRET_NAME = os.getenv('AWS_SECRET_NAME', "like/lion/lecture")
 # secret = get_secret(SECRET_NAME)
 
@@ -34,7 +36,6 @@ LOCAL_IP = os.getenv("LOCAL_IP", "")
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    "lion-lb-18904313-3cb766488974.kr.lb.naverncp.com",
     LOCAL_IP,
 ]
 
