@@ -29,6 +29,8 @@ jobs:
                 cd lion
                 sed -i 's/appVersion: "0.1.0"/appVersion: "0.2.0"/g' Chart.yaml
                 cat ../lion/Chart.yaml
+                git config --global user.email "hjklo0220@gmail.com"
+                git config --global user.name "JunYoung_Kim"
                 git commit -m "change apiVersion in actions"
                 git push
 
