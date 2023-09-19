@@ -26,9 +26,8 @@ jobs:
 
             - name: change apiVersion
               run: |
-                pwd
-                ls -l
-                sed -i 's/appVersion: "0.1.0"/appVersion: "0.2.0"/g' ../lion/Chart.yaml
+                cd lion
+                sed -i 's/appVersion: "0.1.0"/appVersion: "0.2.0"/g' Chart.yaml
                 cat ../lion/Chart.yaml
 
     
