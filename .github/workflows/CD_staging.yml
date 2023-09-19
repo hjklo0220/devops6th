@@ -27,10 +27,14 @@ jobs:
                 repository: hjklo0220/k8s_study
                 token: ${{ secrets.TOKEN }}
 
+            - name: Get version
+              id: version
+              run: export VERSION=${GITHUB_REF#refs/tags/}
+
             - name: change apiVersion
               run: |
                 cd lion
-                sed -i 's/appVersion: ".*"/appVersion: "${{ github.ref_name }}"/g' Chart.yaml
+                sed -i 's/appVersion: ".*"/appVersion: "$VERSION"/g' Chart.yaml
                 cat ../lion/Chart.yaml
                 git add .
                 git config --global user.email "hjklo0220@gmail.com"
