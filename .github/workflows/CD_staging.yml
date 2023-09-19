@@ -22,7 +22,7 @@ jobs:
             - name: checkout helm chart
               uses: actions/checkout@v3
               with:
-                repository: k8s_study
+                repository: hjklo0220/k8s_study
                 path: lion
 
             - name: run test
