@@ -23,7 +23,6 @@ jobs:
               uses: actions/checkout@v3
               with:
                 repository: hjklo0220/k8s_study
-                path: lion
 
             - name: run test
               run: ls -l lion
