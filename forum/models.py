@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django_prometheus.models import ExportModelOperationsMixin
 
 
 # Create your models here.
-class Topic(models.Model):
+class Topic(ExportModelOperationsMixin("topic"), models.Model):
     name = models.TextField(max_length=128, unique=True)
     is_private = models.BooleanField(default=False)
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -25,7 +26,7 @@ class Topic(models.Model):
         return False
 
 
-class Post(models.Model):
+class Post(ExportModelOperationsMixin("post"), models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="posts")
     title = models.TextField(max_length=200)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -38,7 +39,7 @@ class Post(models.Model):
         return self.title
 
 
-class TopicGroupUser(models.Model):
+class TopicGroupUser(ExportModelOperationsMixin("topicGroupUser"), models.Model):
     class GroupChoices(models.IntegerChoices):
         common = 0
         admin = 1

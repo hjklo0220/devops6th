@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     "rest_framework",
     "drf_spectacular",
+    "django_prometheus",
 ]
 
 # Created Apps
@@ -70,6 +71,7 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -78,9 +80,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "lion_app.urls"
+# ROOT_URLCONF = "graphite.urls_prometheus_wrapper"
 
 TEMPLATES = [
     {
@@ -106,7 +110,7 @@ WSGI_APPLICATION = "lion_app.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
         "NAME": os.getenv("POSTGRES_DB", "postgres"),
         "USER": os.getenv("POSTGRES_USER", "postgres"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),

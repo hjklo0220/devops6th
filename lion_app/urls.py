@@ -26,10 +26,11 @@ from common.views import get_version
 
 
 urlpatterns = [
+    path("", include("django_prometheus.urls")),
     path("version/", get_version, name="version"),
     # path("health/", healthcheck, name="healthcheck"),
     path("admin/", admin.site.urls),
-    path("blog/", include(blog_router.urls)),
+    # path("blog/", include(blog_router.urls)),
     path("forum/", include(forum_router.urls)),
     path("api-auth", include("rest_framework.urls")),
     # drf-spectacular
