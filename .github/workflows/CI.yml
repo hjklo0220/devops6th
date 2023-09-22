@@ -8,8 +8,8 @@ on:
     push:
         tags:
           - '*.*.*'
-        branches:
-            - 'main'
+        # branches:
+        #     - 'main'
 
 env:
     IMAGE: ${{ vars.NCR_REGISTRY }}/lion-app
