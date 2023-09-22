@@ -5,13 +5,17 @@ from unittest.mock import patch, MagicMock
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.urls import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 
 from .models import Topic, Post, TopicGroupUser
 
 
 class PostTest(APITestCase):
+    def __init__(self, methodName: str = "runTest") -> None:
+        super().__init__(methodName)
+        self.client = APIClient()
+
     # Setup
     # Topic - private
     # User1 - Unauthorized
@@ -64,12 +68,12 @@ class PostTest(APITestCase):
         }
 
         # when unauthorized tried to write a post on Topic => fail, 401
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         res = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # when authorized tried to write a post on Topic => success, 201
-        self.client.force_login(self.authorized_user)
+        self.client.force_authenticate(self.authorized_user)
         res: HttpResponse = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         res_data = json.loads(res.content)
@@ -77,7 +81,7 @@ class PostTest(APITestCase):
 
         # owner test
         # when owner tried to write a post on Topic => success, 201
-        self.client.force_login(self.superuser)
+        self.client.force_authenticate(self.superuser)
         res: HttpResponse = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
@@ -88,14 +92,14 @@ class PostTest(APITestCase):
             group=TopicGroupUser.GroupChoices.admin,
             user=admin,
         )
-        self.client.force_login(admin)
+        self.client.force_authenticate(admin)
         res: HttpResponse = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_read_permission_topics(self):
         # read public topic
         # unauthorized user request => 200, public topic's posts
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         res = self.client.get(reverse("topic-posts", args=[self.public_topic.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         data = json.loads(res.content)
@@ -104,12 +108,12 @@ class PostTest(APITestCase):
 
         # read private topic
         # unauthorized user request => 401
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         res = self.client.get(reverse("topic-posts", args=[self.private_topic.pk]))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # authrorized user requests => 200, private topic's posts
-        self.client.force_login(self.authorized_user)
+        self.client.force_authenticate(self.authorized_user)
         res = self.client.get(reverse("topic-posts", args=[self.private_topic.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         data = json.loads(res.content)
@@ -117,26 +121,26 @@ class PostTest(APITestCase):
         self.assertEqual(len(data), posts_n)
 
     def test_read_permission_on_post(self):
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         public_post = Post.objects.filter(topic=self.public_topic).first()
         res = self.client.get(reverse("post-detail", args=[public_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         private_post = Post.objects.filter(topic=self.private_topic).first()
         res = self.client.get(reverse("post-detail", args=[private_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        self.client.force_login(self.authorized_user)
+        self.client.force_authenticate(self.authorized_user)
         private_post = Post.objects.filter(topic=self.private_topic).first()
         res = self.client.get(reverse("post-detail", args=[private_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     @patch("forum.views.boto3.client")
-    def test_post_with_or_without_image(self, client: MagicMock):
+    def test_post_with_or_without_image(self, s3_client: MagicMock):
         # mock s3
         s3 = MagicMock()
-        client.return_value = s3
+        s3_client.return_value = s3
         s3.upload_fileobj.return_value = None
         s3.put_object_acl.return_value = None
 
@@ -146,7 +150,7 @@ class PostTest(APITestCase):
             "content": "test",
         }
 
-        self.client.force_login(self.authorized_user)
+        self.client.force_authenticate(self.authorized_user)
         res: HttpResponse = self.client.post(reverse("post-list"), data=data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
@@ -195,16 +199,16 @@ class PostTest(APITestCase):
         )
         # topic owner can delete any post
         topic_owner = self.superuser
-        self.client.force_login(topic_owner)
+        self.client.force_authenticate(topic_owner)
         res = self.client.delete(reverse("post-detail", args=[post1.pk]))
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         # admin can delete any post
-        self.client.force_login(admin_user)
+        self.client.force_authenticate(admin_user)
         res = self.client.delete(reverse("post-detail", args=[post2.pk]))
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         # common can delete only their posts
         ## post created by common -> success
-        self.client.force_login(common_user)
+        self.client.force_authenticate(common_user)
         res = self.client.delete(reverse("post-detail", args=[post3.pk]))
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         ## another post created by another common user -> fail
@@ -215,11 +219,11 @@ class PostTest(APITestCase):
             content="another",
             owner=another_common_user,
         )
-        self.client.force_login(common_user)
+        self.client.force_authenticate(common_user)
         res = self.client.delete(reverse("post-detail", args=[another_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
         # unauthorized user can't delete any post
         ## another post created by another common user -> fail
-        self.client.force_login(self.unauthorized_user)
+        self.client.force_authenticate(self.unauthorized_user)
         res = self.client.delete(reverse("post-detail", args=[another_post.pk]))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
